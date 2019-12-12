@@ -108,4 +108,8 @@ public/
 # Ignore all local history of files
 .history
 
+### AWS ###
+.credentials.json 
+credentials.csv
+
 # End of https://www.gitignore.io/api/node,dotenv,visualstudiocode
