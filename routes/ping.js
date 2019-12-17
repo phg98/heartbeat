@@ -14,10 +14,10 @@ mongoose.connect(
 
 var AWS = require('aws-sdk')
 AWS.config.loadFromPath('./.credentials.json');
-var send_notification = id => {
+var send_notification = server => {
   var params = {
     Message : "Heartbeat Error",
-    PhoneNumber: "+1234567890"
+    PhoneNumber: server.phoneNumber
   }
   var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
   publishTextPromise.then(
@@ -29,30 +29,54 @@ var send_notification = id => {
     })
 }
 
-let idList = {};
+// for debugging, uncomment following line
+send_notification = server => {console.log("Heartbeat Error. Call " + server.phoneNumber)}
 
-/* GET users listing. */
-router.get('/:id', function(req, res, next) {
-  const id = req.params.id;
-  console.log("Got ping from "+id)
+let timerList = {};
 
-  // if timeout exists, clear it
-  timeoutId = idList[id];
-  if (timeoutId !== undefined) {
-    console.log("Id:"+id+" Cleared.")
-    clearTimeout(timeoutId);
-    delete idList[id];
+/* GET ping from server. */
+router.get('/:serverId', async function(req, res, next) {
+  const id = req.params.serverId;
+  console.log("Got ping from " + id)
+
+  // Get the server info from DB
+  try{
+    let foundServer = await Server.find({serverId: id});
+    if (foundServer.length == 0) {
+      res.json({message:"Server Not Found Error"});
+      next();
+    }
+
+    await Server.updateOne({serverId: id}, 
+      { $set : {latestPingTime: new Date()}});
+
+    // if timeout exists, clear it
+    let timer = timerList[id];
+    if (timer !== undefined) {
+      console.log("Id:"+id+" Cleared.")
+      clearTimeout(timer);
+      delete timerList[id];
+      const updatedServer = await Server.updateOne({serverId: id}, 
+        { $set : {latestClearedTime: new Date(), currentStatus: "Up"}});
+    }
+
+    let timeout = foundServer[0].timeout || 30000;
+    var newTimer = setTimeout(async function(){
+      console.log("ID:" + id + " TimeOut!");
+      await Server.updateOne({serverId: id}, 
+        { $set : {latedTimeoutTime: new Date(), currentStatus: "Down"}}); 
+      send_notification(foundServer[0])
+      delete timerList[id];
+    }, timeout);
+    await Server.updateOne({serverId: id}, 
+      { $set : {latestStartTime: new Date(), currentStatus: "Up"}});
+    timerList[id] = newTimer;
+    
+    res.json({message:"Got ping", id: id});
+  } catch (err) {
+    res.json({message: err})
   }
 
-  let timeout = 10000;
-  var newTimeoutId = setTimeout(function(){
-    console.log("ID:" + id + " TimeOut!"); 
-    send_notification(id)
-    delete idList[id];
-  }, timeout);
-  idList[id] = newTimeoutId;
-
-  res.json({message:"Got ping", id: id});
 });
 
 module.exports = router;

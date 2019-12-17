@@ -43,7 +43,7 @@ router.post('/', async function(req, res, next) {
 router.delete('/:serverId', async function(req, res, next) {
   console.log(req.params.serverId);
   try{
-    const removedServer = await Server.remove({serverId: req.params.serverId});
+    const removedServer = await Server.deleteOne({serverId: req.params.serverId});
     res.json(removedServer);
   } catch (err) {
     res.json({message: err})
