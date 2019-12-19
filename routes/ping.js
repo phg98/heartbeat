@@ -3,12 +3,14 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const Server = require('../models/server')
 require('dotenv/config')
+const logger = require('../configs/winston')
 
 mongoose.connect(
   process.env.DB_CONNECTION,
   { useNewUrlParser: true, useUnifiedTopology: true }, 
   ()=>{
-    console.log("Connected to DB.")
+    //console.log("Connected to DB.")
+    logger.info('Connected to DB');
   }
 );
 
@@ -22,28 +24,29 @@ var send_notification = server => {
   var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
   publishTextPromise.then(
     function(data) {
-      console.log("Message ID is " + data.MessageId)
+      logger.info("Message sent. ID is " + data.MessageId)
     }).catch(
       function(err) {
-        console.log(err, err.stack);
+        logger.error(err, err.stack);
     })
 }
 
 // for debugging, uncomment following line
-send_notification = server => {console.log("Heartbeat Error. Call " + server.phoneNumber)}
+send_notification = server => {logger.info("Heartbeat Error. Call " + server.phoneNumber)}
 
 let timerList = {};
 
 /* GET ping from server. */
 router.get('/:serverId', async function(req, res, next) {
   const id = req.params.serverId;
-  console.log("Got ping from " + id)
+  logger.info("Got ping from " + id)
 
   // Get the server info from DB
   try{
     let foundServer = await Server.find({serverId: id});
     if (foundServer.length == 0) {
       res.json({message:"Server Not Found Error"});
+      logger.error("Server Not Found Error");
       next();
     }
 
@@ -53,7 +56,7 @@ router.get('/:serverId', async function(req, res, next) {
     // if timeout exists, clear it
     let timer = timerList[id];
     if (timer !== undefined) {
-      console.log("Id:"+id+" Cleared.")
+      logger.info("Id:"+id+" Cleared.")
       clearTimeout(timer);
       delete timerList[id];
       const updatedServer = await Server.updateOne({serverId: id}, 
@@ -62,7 +65,7 @@ router.get('/:serverId', async function(req, res, next) {
 
     let timeout = foundServer[0].timeout || 30000;
     var newTimer = setTimeout(async function(){
-      console.log("ID:" + id + " TimeOut!");
+      logger.info("ID:" + id + " TimeOut!");
       await Server.updateOne({serverId: id}, 
         { $set : {latedTimeoutTime: new Date(), currentStatus: "Down"}}); 
       send_notification(foundServer[0])
