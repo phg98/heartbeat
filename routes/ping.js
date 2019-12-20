@@ -5,12 +5,35 @@ const Server = require('../models/server')
 require('dotenv/config')
 const logger = require('../configs/winston')
 
+let timerList = {};
+
 mongoose.connect(
   process.env.DB_CONNECTION,
   { useNewUrlParser: true, useUnifiedTopology: true }, 
-  ()=>{
-    //console.log("Connected to DB.")
+  async ()=>{
     logger.info('Connected to DB');
+    // set timers for saved items
+    try{
+      let activeServerList = await Server.find({currentStatus: "Up"});
+      logger.info('Start watching for active servers:');
+      for (server of activeServerList) {
+        logger.info(server);
+        var id = server.serverId;
+        var timeLeft = server.latestStartTime.getTime() + server.timeout - new Date().getTime();
+        timeLeft = timeLeft > 0 ? timeLeft : server.timeout;
+        var newTimer = setTimeout(async function(){
+          logger.info("ID:" + id + " TimeOut!");
+          await Server.updateOne({serverId: id}, 
+            { $set : {latestTimeoutTime: new Date(), currentStatus: "Down"}}); 
+          send_notification(server)
+          delete timerList[id];
+        }, timeLeft);
+        timerList[id] = newTimer;
+        logger.info("Set timeout to timeLeft: " + timeLeft + "msec");
+      }
+    } catch (err) {
+      res.json({message: err})
+    }
   }
 );
 
@@ -31,10 +54,10 @@ var send_notification = server => {
     })
 }
 
-// for debugging, uncomment following line
-send_notification = server => {logger.info("Heartbeat Error. Call " + server.phoneNumber)}
-
-let timerList = {};
+// while developing, don't send message.
+if (process.env.NODE_ENV == 'development') {
+  send_notification = server => {logger.info("Heartbeat Error. Call " + server.phoneNumber)}  
+}
 
 /* GET ping from server. */
 router.get('/:serverId', async function(req, res, next) {
@@ -67,7 +90,7 @@ router.get('/:serverId', async function(req, res, next) {
     var newTimer = setTimeout(async function(){
       logger.info("ID:" + id + " TimeOut!");
       await Server.updateOne({serverId: id}, 
-        { $set : {latedTimeoutTime: new Date(), currentStatus: "Down"}}); 
+        { $set : {latestTimeoutTime: new Date(), currentStatus: "Down"}}); 
       send_notification(foundServer[0])
       delete timerList[id];
     }, timeout);

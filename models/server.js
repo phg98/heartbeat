@@ -7,7 +7,7 @@ const ServerSchema = mongoose.Schema({
     latestPingTime: Date,
     latestStartTime: Date,
     latestClearedTime: Date,
-    latedTimeoutTime: Date,
+    latestTimeoutTime: Date,
     currentStatus: String
 
 })
