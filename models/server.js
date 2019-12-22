@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const ServerSchema = mongoose.Schema({
     serverId: String,
+    serverName: String,
     timeout: Number,
     phoneNumber: String,
     latestPingTime: Date,

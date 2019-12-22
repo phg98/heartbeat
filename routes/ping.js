@@ -41,22 +41,26 @@ var AWS = require('aws-sdk')
 AWS.config.loadFromPath('./.credentials.json');
 var send_notification = server => {
   var params = {
-    Message : "Heartbeat Error",
+    Message : "Heartbeat Error on server:" + server.serverName,
     PhoneNumber: server.phoneNumber
   }
-  var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
-  publishTextPromise.then(
-    function(data) {
-      logger.info("Message sent. ID is " + data.MessageId)
-    }).catch(
-      function(err) {
-        logger.error(err, err.stack);
-    })
-}
-
-// while developing, don't send message.
-if (process.env.NODE_ENV == 'development') {
-  send_notification = server => {logger.info("Heartbeat Error. Call " + server.phoneNumber)}  
+  if (process.env.NODE_ENV == 'development') {
+    // while developing, don't send message.
+    send_notification = server => {
+      logger.info(params.Message);
+      logger.info("Call " + params.PhoneNumber)
+    }
+  }
+  else {
+    var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
+    publishTextPromise.then(
+      function(data) {
+        logger.info("Message sent. ID is " + data.MessageId)
+      }).catch(
+        function(err) {
+          logger.error(err, err.stack);
+      })
+  }
 }
 
 /* GET ping from server. */
