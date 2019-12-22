@@ -8,6 +8,7 @@
   "dependencies": {
     "aws-sdk": "^2.595.0",
     "body-parser": "^1.19.0",
+    "clean-css": "^4.2.1",
     "constantinople": "^4.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
