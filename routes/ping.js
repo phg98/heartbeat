@@ -46,10 +46,8 @@ var send_notification = server => {
   }
   if (process.env.NODE_ENV == 'development') {
     // while developing, don't send message.
-    send_notification = server => {
-      logger.info(params.Message);
-      logger.info("Call " + params.PhoneNumber)
-    }
+    logger.info(params.Message);
+    logger.info("Call " + params.PhoneNumber)
   }
   else {
     var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();

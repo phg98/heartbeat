@@ -28,6 +28,7 @@ router.post('/', async function(req, res, next) {
   console.log(req.body);
   var server = new Server({
     serverId: req.body.serverId,
+    serverName: req.body.serverName,
     timeout: req.body.timeout,
     phoneNumber: req.body.phoneNumber
   })
