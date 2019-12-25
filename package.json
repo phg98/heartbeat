@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "mocha"
+    "test": "mocha --recursive --exit"
   },
   "dependencies": {
     "aws-sdk": "^2.595.0",

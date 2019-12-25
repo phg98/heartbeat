@@ -10,6 +10,9 @@ const stream = {
   }
 }
 
+const pingService = require('./services/pingService')
+pingService.init();
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var pingRouter = require('./routes/ping');
