@@ -7,6 +7,12 @@ let timerList = {};
 
 var pingService = {}
 
+pingService.end = function() {
+  mongoose.disconnect(()=>{
+    logger.info("Disconnected from DB");
+  })
+}
+
 pingService.init = function() {
     mongoose.connect(
         process.env.DB_CONNECTION,
@@ -96,6 +102,12 @@ pingService.handlePing = async function(id) {
         { $set : {latestStartTime: new Date(), currentStatus: "Up"}});
     timerList[id] = newTimer;
     
+}
+
+pingService.end = function() {
+  mongoose.disconnect(()=>{
+    logger.info("Disconnected from DB");
+  })
 }
 
 module.exports = pingService
