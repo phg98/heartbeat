@@ -73,7 +73,7 @@ pingService.send_notification = server => {
   }
 }
 
-pingService.handlePing = async function(id, callback) {
+pingService.handlePing = async function(id) {
     let foundServer = await Server.find({serverId: id});
     if (foundServer.length == 0) {
         logger.error("Server Not Found Error");
@@ -105,8 +105,6 @@ pingService.handlePing = async function(id, callback) {
     await Server.updateOne({serverId: id}, 
         { $set : {latestStartTime: new Date(), currentStatus: "Up"}});
     timerList[id] = newTimer;
-    if (callback != undefined)
-      callback();
 }
 
 module.exports = pingService
