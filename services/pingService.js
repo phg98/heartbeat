@@ -7,13 +7,15 @@ let timerList = {};
 
 var pingService = {}
 
-pingService.end = function() {
+pingService.end = function(callback) {
   mongoose.disconnect(()=>{
     logger.info("Disconnected from DB");
+    if (callback != undefined)
+      callback();
   })
 }
 
-pingService.init = function() {
+pingService.init = function(callback) {
     mongoose.connect(
         process.env.DB_CONNECTION,
         { useNewUrlParser: true, useUnifiedTopology: true }, 
@@ -38,6 +40,8 @@ pingService.init = function() {
               timerList[id] = newTimer;
               logger.info("Set timeout to timeLeft: " + timeLeft + "msec");
             }
+            if (callback != undefined)
+              callback();
           } catch (err) {
             res.json({message: err})
           }
@@ -69,7 +73,7 @@ pingService.send_notification = server => {
   }
 }
 
-pingService.handlePing = async function(id) {
+pingService.handlePing = async function(id, callback) {
     let foundServer = await Server.find({serverId: id});
     if (foundServer.length == 0) {
         logger.error("Server Not Found Error");
@@ -101,13 +105,8 @@ pingService.handlePing = async function(id) {
     await Server.updateOne({serverId: id}, 
         { $set : {latestStartTime: new Date(), currentStatus: "Up"}});
     timerList[id] = newTimer;
-    
-}
-
-pingService.end = function() {
-  mongoose.disconnect(()=>{
-    logger.info("Disconnected from DB");
-  })
+    if (callback != undefined)
+      callback();
 }
 
 module.exports = pingService
