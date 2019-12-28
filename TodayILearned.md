@@ -14,3 +14,8 @@
         users = mongoose.model('users', <UsersSchema...>)
     }
     ```
+* 개발노트북에서는 잘 동작하는데 Ubuntu서버에서는 서버추가기능이 동작하지 않는다.
+    * 이전 버전으로 돌려보자.
+        * git checkout -b old-project-state 0ad5a7a6
+    * __서버의 문제가 아니라 Postman으로 post명령을 보내는데 'json'을 'text'로 잘못 설정한것이 문제였음.__
+    * 다시 원래대로 돌리자.
