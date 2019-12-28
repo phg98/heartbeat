@@ -26,7 +26,7 @@ describe("pingService", function () {
 
     this.afterEach((done)=>{        
         try{
-            const removedServer = Server.deleteMany({}, function(err, result) {
+            const removedServer = Server.deleteMany({isTemp:true}, function(err, result) {
                 if (err) {
                     // console.log(err);
                     done();
@@ -46,6 +46,7 @@ describe("pingService", function () {
             serverName: "5sec",
             timeout: 5000,
             phoneNumber: "+12345678",
+            isTemp:true
         })
         try{
             const savedServer = await server.save();

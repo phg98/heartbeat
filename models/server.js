@@ -10,8 +10,8 @@ const ServerSchema = new Schema({
     latestStartTime: Date,
     latestClearedTime: Date,
     latestTimeoutTime: Date,
-    currentStatus: String
-
+    currentStatus: String,
+    isTemp: Boolean 
 })
 
 module.exports = mongoose.model('Servers', ServerSchema);

@@ -37,7 +37,8 @@ router.post('/', async function(req, res, next) {
     serverId: req.body.serverId,
     serverName: req.body.serverName,
     timeout: req.body.timeout,
-    phoneNumber: req.body.phoneNumber
+    phoneNumber: req.body.phoneNumber,
+    isTemp: req.body.isTemp,
   })
   try{
     const savedServer = await server.save();
