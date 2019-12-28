@@ -1,5 +1,12 @@
 var expect = require("chai").expect
-const Server = require('../models/server');
+//const Server = require('../models/server');
+var Server;
+try {
+    var mongoose = require('mongoose');
+    Server = mongoose.model('Servers')
+} catch (error) {
+    Server = require('../models/server');
+}
 
 // Set Mock for MongoDB
 MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
@@ -35,9 +42,9 @@ describe("pingService", function () {
 
     it("handle Ping", async function () {        
         var server = new Server({
-            serverId: "61sec",
-            serverName: "61sec",
-            timeout: 61000,
+            serverId: "5sec",
+            serverName: "5sec",
+            timeout: 5000,
             phoneNumber: "+12345678",
         })
         try{
@@ -46,7 +53,7 @@ describe("pingService", function () {
         } catch (err) {            
             console.log({message: err})
         }
-        await pingService.handlePing("61sec");
+        await pingService.handlePing("5sec");
     })
 
 })

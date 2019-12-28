@@ -1,6 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const Server = require('../models/server');
+// const Server = require('../models/server');
+var Server;
+try {
+    var mongoose = require('mongoose');
+    Server = mongoose.model('Servers')
+} catch (error) {
+    Server = require('../models/server');
+}
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {

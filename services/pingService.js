@@ -1,5 +1,11 @@
-const mongoose = require('mongoose');
-const Server = require('../models/server')
+const mongoose = require('mongoose'); 
+// const Server = require('../models/server')
+var Server;
+try {
+    Server = mongoose.model('Servers')
+} catch (error) {
+    Server = require('../models/server');
+}
 require('dotenv/config')
 const logger = require('../configs/winston')
 
@@ -20,7 +26,7 @@ pingService.init = function(callback) {
         process.env.DB_CONNECTION,
         { useNewUrlParser: true, useUnifiedTopology: true }, 
         async ()=>{
-          logger.info('Connected to DB');
+          logger.info('Connected to DB' + process.env.DB_CONNECTION);
           // set timers for saved items
           try{
             let activeServerList = await Server.find({currentStatus: "Up"});

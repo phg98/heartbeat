@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-const ServerSchema = mongoose.Schema({
+const ServerSchema = new Schema({
     serverId: String,
     serverName: String,
     timeout: Number,
