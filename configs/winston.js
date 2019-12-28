@@ -29,8 +29,8 @@ const infoTransport = new winston.transports.File({
     colorize: true,
     format: winston.format.combine(
         winston.format.label({ label: 'heartbeat' }),
+        appendTimestamp({ tz: 'Asia/Seoul' }),
         winston.format.timestamp(),
-        winston.format.colorize(),
         myFormat
     )
 })
@@ -44,8 +44,8 @@ const errorTransport = new winston.transports.File({
     colorize: true,
     format: winston.format.combine(
         winston.format.label({ label: 'heartbeat' }),
+        appendTimestamp({ tz: 'Asia/Seoul' }),
         winston.format.timestamp(),
-        winston.format.colorize(),
         myFormat
     )
 })
