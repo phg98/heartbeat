@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "mocha --recursive --exit"
+    "test": "mocha --recursive --exit",
+    "coverage": "nyc npm test"
   },
   "dependencies": {
     "aws-sdk": "^2.595.0",
@@ -28,6 +29,7 @@
     "mocha": "^6.2.2",
     "mongodb-memory-server": "^6.2.0",
     "nodemon": "^2.0.2",
+    "nyc": "^15.0.0",
     "supertest": "^4.0.2"
   }
 }
