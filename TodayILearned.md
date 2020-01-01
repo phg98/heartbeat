@@ -25,3 +25,4 @@
     * coverage-gutters extension을 설치하고, 커버리지 툴의 옵션을 아래와 같이 수정하면 된다.
     ``` "coverage": "nyc --reporter=lcov --reporter=text npm test" ```
 * 아직 Promise와 async/await를 잘 모르겠다.ㅠㅠ
+* API 테스트는 supertest 모듈을 사용하면 된다. users.test.js침조
