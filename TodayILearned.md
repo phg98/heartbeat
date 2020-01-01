@@ -19,3 +19,9 @@
         * git checkout -b old-project-state 0ad5a7a6
     * __서버의 문제가 아니라 Postman으로 post명령을 보내는데 'json'을 'text'로 잘못 설정한것이 문제였음.__
     * 다시 원래대로 돌리자.
+
+## 2020-1-1
+* 커버리지 측정후 vscode에서 실행된 라인과 안 된 라인 표시하기
+    * coverage-gutters extension을 설치하고, 커버리지 툴의 옵션을 아래와 같이 수정하면 된다.
+    ``` "coverage": "nyc --reporter=lcov --reporter=text npm test" ```
+* 아직 Promise와 async/await를 잘 모르겠다.ㅠㅠ

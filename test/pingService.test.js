@@ -15,6 +15,15 @@ let mongoServer;
 var pingService = require('../services/pingService')
 
 describe("pingService", function () {
+          
+    var server = new Server({
+        serverId: "5sec",
+        serverName: "5sec",
+        timeout: 5000,
+        phoneNumber: "+12345678",
+        isTemp:true
+    })
+    
     this.beforeEach(done=>{
         mongoServer = new MongoMemoryServer();
         mongoServer.getUri().
@@ -40,21 +49,25 @@ describe("pingService", function () {
         }
     })
 
-    it("handle Ping", async function () {        
-        var server = new Server({
-            serverId: "5sec",
-            serverName: "5sec",
-            timeout: 5000,
-            phoneNumber: "+12345678",
-            isTemp:true
-        })
-        try{
-            const savedServer = await server.save();
-            // console.log(savedServer);
-        } catch (err) {            
-            console.log({message: err})
-        }
-        await pingService.handlePing("5sec");
+    it("handle Ping", async function () {  
+        // Arrange
+        const savedServer = await server.save();
+        
+        // Act
+        var handled = await pingService.handlePing(server.serverId);
+
+        // Assert        
+        expect(handled).to.equal("Handled")
+    })
+
+    it("should check unsaved server", async function () {
+        // Arrange    
+
+        // Act
+        var handled = await pingService.handlePing(server.serverId);
+
+        // Assert
+        expect(handled).to.equal("Server Not Found Error")
     })
 
 })

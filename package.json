@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "test": "mocha --recursive --exit",
-    "coverage": "nyc npm test"
+    "coverage": "nyc --reporter=lcov --reporter=text npm test"
   },
   "dependencies": {
     "aws-sdk": "^2.595.0",
