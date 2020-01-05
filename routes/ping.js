@@ -4,7 +4,7 @@ const pingService = require("../services/pingService")
 const logger = require('../configs/winston')
 
 /* GET ping from server. */
-router.get('/:serverId', async function(req, res, next) {
+router.get('/:serverId', async function(req, res) {
   const id = req.params.serverId;
   logger.info("Got ping from " + id)
 

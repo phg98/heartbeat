@@ -31,7 +31,7 @@ pingService.init = function(callback) {
           try{
             let activeServerList = await Server.find({currentStatus: "Up"});
             logger.info('Start watching for active servers:');
-            for (server of activeServerList) {
+            for (const server of activeServerList) {
               logger.info(server);
               var id = server.serverId;
               var timeLeft = server.latestStartTime.getTime() + server.timeout - new Date().getTime();
@@ -49,7 +49,7 @@ pingService.init = function(callback) {
             if (callback != undefined)
               callback();
           } catch (err) {
-            res.json({message: err})
+            return err;
           }
         }
     );
@@ -95,7 +95,7 @@ pingService.handlePing = async function(id) {
         logger.info("Id:"+id+" Cleared.")
         clearTimeout(timer);
         delete timerList[id];
-        const updatedServer = await Server.updateOne({serverId: id}, 
+        await Server.updateOne({serverId: id}, 
         { $set : {latestClearedTime: new Date(), currentStatus: "Up"}});
     }
 

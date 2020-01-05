@@ -9,7 +9,7 @@ try {
 }
 
 // Set Mock for MongoDB
-MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
+var MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
 let mongoServer;
 
 var pingService = require('../services/pingService')
@@ -23,7 +23,7 @@ describe("pingService", function () {
         phoneNumber: "+12345678",
         isTemp:true
     })
-    
+
     this.beforeEach(done=>{
         mongoServer = new MongoMemoryServer();
         mongoServer.getUri().
@@ -35,7 +35,7 @@ describe("pingService", function () {
 
     this.afterEach((done)=>{        
         try{
-            const removedServer = Server.deleteMany({isTemp:true}, function(err, result) {
+            Server.deleteMany({isTemp:true}, function(err) {
                 if (err) {
                     // console.log(err);
                     done();
@@ -51,7 +51,7 @@ describe("pingService", function () {
 
     it("handle Ping", async function () {  
         // Arrange
-        const savedServer = await server.save();
+        await server.save();
         
         // Act
         var handled = await pingService.handlePing(server.serverId);
