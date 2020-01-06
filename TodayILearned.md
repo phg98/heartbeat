@@ -26,3 +26,6 @@
     ``` "coverage": "nyc --reporter=lcov --reporter=text npm test" ```
 * 아직 Promise와 async/await를 잘 모르겠다.ㅠㅠ
 * API 테스트는 supertest 모듈을 사용하면 된다. users.test.js침조
+
+## 2020-1-7
+* mocha 테스트시 일정시간 기다리려면 setTimeout을 그냥쓰면 안되고 Promise로 만들어서 써야한다. pingService.test.js 참고.

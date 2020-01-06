@@ -17,9 +17,9 @@ var pingService = require('../services/pingService')
 describe("pingService", function () {
           
     var server = new Server({
-        serverId: "5sec",
-        serverName: "5sec",
-        timeout: 5000,
+        serverId: "1sec",
+        serverName: "1sec",
+        timeout: 1000,
         phoneNumber: "+12345678",
         isTemp:true
     })
@@ -58,6 +58,20 @@ describe("pingService", function () {
 
         // Assert        
         expect(handled).to.equal("Handled")
+        let isNotified = false;
+        pingService.send_notification = (serverId)=>{
+            isNotified = true;
+        }
+
+        var waitForTimeout = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve();
+            }, server.timeout + 500);
+        });
+    
+        await waitForTimeout;
+    
+        expect(isNotified).to.equal(true);
     })
 
     it("should check unsaved server", async function () {
