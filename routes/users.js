@@ -64,15 +64,15 @@ router.delete('/:serverId', async function(req, res, next) {
 });
 
 /* UPDATE user */
-router.patch('/:serverId', async function(req, res, next) {
-  logger.info(req.params.serverId);
-  try{
-    const updatedServer = await Server.updateOne({serverId: req.params.serverId}, 
-      { $set : req.body});
-    res.json(updatedServer);
-  } catch (err) {
-    res.json({message: err})
-  }
-});
+// router.patch('/:serverId', async function(req, res, next) {
+//   logger.info(req.params.serverId);
+//   try{
+//     const updatedServer = await Server.updateOne({serverId: req.params.serverId}, 
+//       { $set : req.body});
+//     res.json(updatedServer);
+//   } catch (err) {
+//     res.json({message: err})
+//   }
+// });
 
 module.exports = router;
