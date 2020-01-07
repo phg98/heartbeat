@@ -1,4 +1,7 @@
-var expect = require("chai").expect
+const chai = require('chai')
+const expect = chai.expect
+chai.use(require('chai-as-promised'))
+
 //const Server = require('../models/server');
 var Server;
 try {
@@ -77,11 +80,9 @@ describe("pingService", function () {
     it("should check unsaved server", async function () {
         // Arrange    
 
-        // Act
-        var handled = await pingService.handlePing(server.serverId);
+        // Act & Assert
+        await expect( pingService.handlePing(server.serverId)).to.be.rejectedWith("Server Not Found Error")
 
-        // Assert
-        expect(handled).to.equal("Server Not Found Error")
     })
 
 })

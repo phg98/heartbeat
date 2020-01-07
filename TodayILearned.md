@@ -27,5 +27,9 @@
 * 아직 Promise와 async/await를 잘 모르겠다.ㅠㅠ
 * API 테스트는 supertest 모듈을 사용하면 된다. users.test.js침조
 
-## 2020-1-7
+## 2020-1-6
 * mocha 테스트시 일정시간 기다리려면 setTimeout을 그냥쓰면 안되고 Promise로 만들어서 써야한다. pingService.test.js 참고.
+
+## 2020-1-7
+* mocha 테스트시 async함수의 throw를 잡으려면 chai-as-promised를 설치하고 아래와 같이 쓰자
+```await expect(asyncFunc()).to.be.rejectedWith("error message")```

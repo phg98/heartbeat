@@ -83,7 +83,7 @@ pingService.handlePing = async function(id) {
     let foundServer = await Server.find({serverId: id});
     if (foundServer.length == 0) {
         logger.error("Server Not Found Error");        
-        return "Server Not Found Error";
+        throw new Error("Server Not Found Error");
     }
 
     await Server.updateOne({serverId: id}, 

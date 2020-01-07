@@ -12,7 +12,7 @@ router.get('/:serverId', async function(req, res) {
     await pingService.handlePing(id);    
     res.json({message:"Got ping", id: id});
   } catch (err) {
-    res.json({message: err})
+    res.status(404).json({message: err})
   }
 
 });
