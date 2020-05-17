@@ -1,5 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
@@ -18,6 +20,7 @@ var usersRouter = require('./routes/users');
 var pingRouter = require('./routes/ping');
 
 var app = express();
+app.use(cors({origin:"http://test.myserverdown.com"}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
