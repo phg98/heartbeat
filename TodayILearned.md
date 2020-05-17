@@ -38,3 +38,7 @@
 * git stash : 수정된 내용을 임시보관한다.
 * git stash list : 임시보관한 내용을 확인한다.
 * git stash pop : 임시보관했던 내용을 다시 적용한다.
+
+## 2020-5-17
+* mocha test시 에러 발생 : "before all" hook in "{root}": Error: Timeout of 2000ms exceeded
+    * PC에 따라 서버 기동이 느려서 그렇다. mocha에 옵션으로 --timeout 10000 주어서 해결.
