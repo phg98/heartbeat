@@ -33,3 +33,8 @@
 ## 2020-1-7
 * mocha 테스트시 async함수의 throw를 잡으려면 chai-as-promised를 설치하고 아래와 같이 쓰자
 ```await expect(asyncFunc()).to.be.rejectedWith("error message")```
+
+## 2020-5-15
+* git stash : 수정된 내용을 임시보관한다.
+* git stash list : 임시보관한 내용을 확인한다.
+* git stash pop : 임시보관했던 내용을 다시 적용한다.

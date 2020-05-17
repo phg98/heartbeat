@@ -1,6 +1,8 @@
+process.env.NODE_ENV = 'test'
 const chai = require('chai')
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
+
 
 //const Server = require('../models/server');
 var Server;

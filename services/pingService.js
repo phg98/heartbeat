@@ -56,7 +56,9 @@ pingService.init = function(callback) {
 }
 
 var AWS = require('aws-sdk')
-AWS.config.loadFromPath('./.credentials.json');
+if (process.env.NODE_ENV !== 'test') {
+  AWS.config.loadFromPath('./.credentials.json');  
+}
 pingService.send_notification = server => {
   var params = {
     Message : "Heartbeat Error on server:" + server.serverName,
