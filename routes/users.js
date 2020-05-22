@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 const logger = require('../configs/winston')
+const uuid = require('../utils/uuid')
 
 // const Server = require('../models/server');
 var Server;
@@ -23,10 +24,10 @@ router.get('/', async function(req, res, next) {
 });
 
 /* Get user */
-router.get('/:serverId', async function(req, res, next) {
-  logger.info(req.params.serverId);
+router.get('/:serverName', async function(req, res, next) {
+  logger.info(req.params.serverName);
   try{
-    const foundServer = await Server.find({serverId: req.params.serverId});
+    const foundServer = await Server.find({serverName: req.params.serverName});
     res.json(foundServer);
   } catch (err) {
     res.json({message: err})
@@ -37,7 +38,8 @@ router.get('/:serverId', async function(req, res, next) {
 router.post('/', async function(req, res, next) {
   logger.info("Add server : " + JSON.stringify(req.body));
   var server = new Server({
-    serverId: req.body.serverId,
+    //serverId: req.body.serverId,
+    serverId: uuid(),
     serverName: req.body.serverName,
     timeout: req.body.timeout,
     phoneNumber: req.body.phoneNumber,
@@ -53,10 +55,10 @@ router.post('/', async function(req, res, next) {
 });
 
 /* DELETE user */
-router.delete('/:serverId', async function(req, res, next) {
-  logger.info(req.params.serverId);
+router.delete('/:serverName', async function(req, res, next) {
+  logger.info(req.params.serverName);
   try{
-    const removedServer = await Server.deleteOne({serverId: req.params.serverId});
+    const removedServer = await Server.deleteOne({serverName: req.params.serverName});
     res.json(removedServer);
   } catch (err) {
     res.json({message: err})

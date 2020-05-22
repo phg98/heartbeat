@@ -1,8 +1,10 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'test'
 var request = require("supertest")
 const chai = require("chai")
 var chai_expect = chai.expect
 // chai.use(require('chai-as-promised'))
 var app;
+const TEST_UUID = '42345678901234567890123456789012'
 
 before(async () => {
     // Set Mock for MongoDB
@@ -37,13 +39,15 @@ describe("ping", function () {
         .expect(200)
         .end(() => {
             // Act
-            request(app).get("/ping/" + data.serverId)
+            request(app).get("/ping/" + TEST_UUID)
                 .expect(200)
                 .end(()=>{
                     // Assert                    
-                    request(app).get("/users/" + data.serverId)
+                    request(app).get("/users/" + data.serverName)
                     .expect(200)
-                    .expect((res)=> {chai_expect(res.body[0]).to.be.an('Object').that.includes({currentStatus: "Up"})})
+                    .expect((res)=> {
+                        chai_expect(res.body[0]).to.be.an('Object').that.includes({currentStatus: "Up"})
+                    })
                     .end(done)
                 })
         })
