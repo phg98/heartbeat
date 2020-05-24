@@ -50,6 +50,7 @@ router.post('/', async function(req, res, next) {
     logger.info("Saved server : "+JSON.stringify(savedServer))
     res.json(savedServer);
   } catch (err) {
+    logger.error("Saved server error: "+JSON.stringify(err))
     res.json({message: err})
   }
 });

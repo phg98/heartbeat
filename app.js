@@ -20,7 +20,11 @@ var usersRouter = require('./routes/users');
 var pingRouter = require('./routes/ping');
 
 var app = express();
-app.use(cors({origin:"http://test.myserverdown.com"}));
+if (process.env.NODE_ENV === 'development') {
+  app.use(cors());
+} else {
+  app.use(cors({origin:"http://test.myserverdown.com"}));
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
