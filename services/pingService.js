@@ -6,7 +6,8 @@ try {
 } catch (error) {
     Server = require('../models/server');
 }
-require('dotenv/config')
+const dotenv = require('dotenv')
+dotenv.config();
 const logger = require('../configs/winston')
 
 let timerList = {};

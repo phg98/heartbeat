@@ -20,6 +20,9 @@ var usersRouter = require('./routes/users');
 var pingRouter = require('./routes/ping');
 
 var app = express();
+
+const dotenv = require('dotenv');
+dotenv.config();
 if (process.env.NODE_ENV === 'development') {
   app.use(cors());
 } else {
