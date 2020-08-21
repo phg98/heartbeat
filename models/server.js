@@ -11,7 +11,8 @@ const ServerSchema = new Schema({
     latestClearedTime: Date,
     latestTimeoutTime: Date,
     currentStatus: String,
-    isTemp: Boolean 
+    isTemp: Boolean,
+    email: String
 })
 
 module.exports = mongoose.model('Servers', ServerSchema);

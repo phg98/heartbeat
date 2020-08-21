@@ -44,6 +44,7 @@ router.post('/', async function(req, res, next) {
     timeout: req.body.timeout,
     phoneNumber: req.body.phoneNumber,
     isTemp: req.body.isTemp,
+    email: req.body.email,
   })
   try{
     const savedServer = await server.save();

@@ -61,17 +61,50 @@ if (process.env.NODE_ENV !== 'test') {
   AWS.config.loadFromPath('./.credentials.json');  
 }
 pingService.send_notification = server => {
-  var params = {
+  var messageParams = {
     Message : "Heartbeat Error on server:" + server.serverName,
     PhoneNumber: server.phoneNumber
   }
   if (process.env.NODE_ENV !== 'production') {
-    // while developing, don't send message.
-    logger.info(params.Message);
-    logger.info("Call " + params.PhoneNumber)
+    // 개발모드일때는 문자메세지 보내지 않고 이메일보낸다.
+    logger.info(messageParams.Message);
+    logger.info("Call " + messageParams.PhoneNumber)
+    if (!server.email) {
+      logger.error("E-mail address not found.");
+    }
+    let emailParams = {
+      Destination: {
+        ToAddresses: [server.email],  // 받는 사람 이메일 주소
+        CcAddresses: [],    // 참조
+        BccAddresses: []    // 숨은 참조
+      },
+      Message: {
+        Body: {
+          Text: {
+            Data: `서버(${server.serverName})에서 응답이 없습니다.`,      // 본문 내용
+            Charset: "utf-8"            // 인코딩 타입
+          }
+        },
+        Subject: {
+          Data: `서버(${server.serverName})에서 응답이 없습니다.`,   // 제목 내용
+          Charset: "utf-8"              // 인코딩 타입
+        }
+      },
+      Source: "phg98@naver.com",          // 보낸 사람 주소
+      ReplyToAddresses: [] // 답장 받을 이메일 주소
+    }
+    var sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(emailParams).promise();
+    sendPromise.then(
+      function (data) {
+        logger.info(data.MessageId);
+      }).catch(
+        function (err) {
+          logger.info(err, err.stack);
+        });
+
   }
   else {
-    var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
+    var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(messageParams).promise();
     publishTextPromise.then(
       function(data) {
         logger.info("Message sent. ID is " + data.MessageId)
