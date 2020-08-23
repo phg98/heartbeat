@@ -1,6 +1,12 @@
 var createError = require('http-errors');
 var express = require('express');
 var cors = require('cors');
+const rateLimit = require("express-rate-limit");
+ 
+// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+// see https://expressjs.com/en/guide/behind-proxies.html
+// app.set('trust proxy', 1);
+
 
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -39,9 +45,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+if (process.env.NODE_ENV === 'development') {
+  const limiter = rateLimit({
+    windowMs: 30 * 1000, // 39 seconds
+    max: 1 // limit each IP to 1 requests per windowMs
+  });
+  app.post('/users', limiter);
+} else {
+  const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minutes
+    max: 1 // limit each IP to 1 requests per windowMs
+  });
+  app.post('/users', limiter);
+}
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/ping', pingRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
