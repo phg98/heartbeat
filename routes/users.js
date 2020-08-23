@@ -56,16 +56,21 @@ router.post('/', async function(req, res, next) {
   }
 });
 
-/* DELETE user */
-router.delete('/:serverName', async function(req, res, next) {
-  logger.info(req.params.serverName);
-  try{
-    const removedServer = await Server.deleteOne({serverName: req.params.serverName});
-    res.json(removedServer);
-  } catch (err) {
-    res.json({message: err})
-  }
-});
+
+if (process.env.NODE_ENV === 'development') {
+  logger.info('enable DELETE on development mode.')
+  /* DELETE user */
+  router.delete('/:serverName', async function (req, res, next) {
+    logger.info(req.params.serverName);
+    try {
+      const removedServer = await Server.deleteOne({ serverName: req.params.serverName });
+      res.json(removedServer);
+    } catch (err) {
+      res.json({ message: err })
+    }
+  });
+} 
+
 
 /* UPDATE user */
 // router.patch('/:serverId', async function(req, res, next) {
