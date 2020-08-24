@@ -45,19 +45,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+let limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minutes
+  max: 1 // limit each IP to 1 requests per windowMs
+});
 if (process.env.NODE_ENV === 'development') {
-  const limiter = rateLimit({
-    windowMs: 30 * 1000, // 39 seconds
+  limiter = rateLimit({
+    windowMs: 30 * 1000, // 30 seconds
     max: 1 // limit each IP to 1 requests per windowMs
   });
-  app.post('/users', limiter);
-} else {
-  const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minutes
-    max: 1 // limit each IP to 1 requests per windowMs
+} else if (process.env.NODE_ENV === 'test') {
+  limiter = rateLimit({
+    windowMs: 1 * 1000, // 1 seconds
+    max: 1000
   });
-  app.post('/users', limiter);
 }
+app.post('/users', limiter);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

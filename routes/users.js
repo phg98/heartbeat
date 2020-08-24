@@ -57,7 +57,7 @@ router.post('/', async function(req, res, next) {
 });
 
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   logger.info('enable DELETE on development mode.')
   /* DELETE user */
   router.delete('/:serverName', async function (req, res, next) {
