@@ -57,7 +57,7 @@ pingService.init = function(callback) {
 }
 
 var AWS = require('aws-sdk')
-if ((process.env.NODE_ENV !== 'test') || (!process.env.AWS_ACCESS_KEY_ID)) {
+if ((process.env.NODE_ENV !== 'test') && (!process.env.AWS_ACCESS_KEY_ID)) {
   AWS.config.loadFromPath('./.credentials.json');  
 }
 pingService.send_notification = server => {
