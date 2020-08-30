@@ -16,9 +16,11 @@ try {
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
   try {
+    logger.info('GET users');
     const servers = await Server.find();
     res.json(servers);
   }catch(err){
+    logger.error('GET users failed');
     res.json({message: err});
   }
 });
