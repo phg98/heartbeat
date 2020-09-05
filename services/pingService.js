@@ -26,7 +26,11 @@ pingService.init = function(callback) {
     mongoose.connect(
         process.env.DB_CONNECTION,
         { useNewUrlParser: true, useUnifiedTopology: true }, 
-        async ()=>{
+        async (err)=>{
+          if (err) {
+            logger.error(`DB connection error : ${err}`)
+            return err
+          }
           logger.info('Connected to DB' + process.env.DB_CONNECTION);
           // set timers for saved items
           try{
