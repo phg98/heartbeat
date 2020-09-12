@@ -58,6 +58,15 @@ router.post('/', async function(req, res, next) {
     email: req.body.email,
   })
   try{
+    // 서버이름이 이미 존재하면 에러처리한다.
+    const foundServer = await Server.find({serverName: server.serverName});
+    logger.info(foundServer);
+    if (foundServer.length) {
+      let err = 'Server name already taken : ' + server.serverName
+      logger.error(err);
+      res.status(409).json({message: err});
+      return;
+    }
     const savedServer = await server.save();
     logger.info("Saved server : "+JSON.stringify(savedServer))
     res.json(savedServer);
