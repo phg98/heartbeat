@@ -39,7 +39,7 @@ describe("homepage", function () {
         request(app).post("/users")
             .send(data)
             .expect(200)
-            .expect((res)=> {chai_expect(res.body.serverId).match(/\b4[0-9A-Fa-f]{31}\b/g)})
+            .expect((res)=> {chai_expect(res.body.serverId).match(/\b[0-9A-Fa-f]{9}\b/g)})
             .end(done);
     })
     
