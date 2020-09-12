@@ -32,9 +32,16 @@ router.get('/:serverName', async function(req, res, next) {
   logger.info(req.params.serverName);
   try{
     const foundServer = await Server.find({serverName: req.params.serverName});
-    res.json(foundServer);
+    if (foundServer.length) {
+      logger.info('Found server : ' + foundServer);
+      res.json(foundServer);
+    } else {
+      logger.error('Can NOT find server : ' + req.params.serverName);
+      res.json(foundServer);
+    }
   } catch (err) {
-    res.json({message: err})
+    logger.error('GET user failed for ' + req.params.serverName);
+    res.status(404).json({message: err});
   }
 });
 
