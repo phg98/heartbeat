@@ -4,7 +4,7 @@ const chai = require("chai")
 var chai_expect = chai.expect
 // chai.use(require('chai-as-promised'))
 var app;
-const TEST_UUID = '42345678901234567890123456789012'
+const TEST_UUID = '123abcABC'
 
 before(async () => {
     // Set Mock for MongoDB
