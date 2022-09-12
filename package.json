@@ -24,7 +24,7 @@
     "moment-timezone": "^0.5.35",
     "mongoose": "^5.8.2",
     "morgan": "~1.9.1",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "shortid": "^2.2.15",
     "uuid4": "^1.1.4",
     "winston": "^3.2.1"
