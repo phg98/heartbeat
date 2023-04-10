@@ -9,7 +9,7 @@
     "coverage": "nyc --reporter=lcov --reporter=text npm test"
   },
   "dependencies": {
-    "aws-sdk": "^2.814.0",
+    "aws-sdk": "^2.1354.0",
     "body-parser": "^1.20.1",
     "clean-css": "^4.2.1",
     "constantinople": "^4.0.1",
